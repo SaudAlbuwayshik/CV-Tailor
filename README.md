@@ -1,81 +1,71 @@
-# CV Tailor: Section-Based AI Paraphrasing Tool
+# 📄 CV Tailor: AI-Powered Resume Customizer
 
-**CV Tailor** is a simple Streamlit app that helps job seekers paraphrase specific sections of their CV (like work experience or summaries) to better align with job descriptions. This tool uses NLP models from Hugging Face to provide accurate and targeted paraphrasing.
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/)
 
----
-
-## 🔧 Features
-
-- Paste a **CV section** and a **job description**
-- Receive a **paraphrased version** of the CV section tailored to the job
-- Supports **downloading** the output for easy use in resumes
+CV Tailor helps you adapt specific sections of your resume to better match a job description using AI-powered paraphrasing.
 
 ---
 
-## 🚀 Demo
+## 🚀 Features
 
-You can run this tool locally by following the steps below.
+- 🧠 Uses transformers to paraphrase your CV based on a job description
+- 📄 Accepts PDF uploads of your resume
+- 🌐 Scrapes job descriptions from public URLs or takes text input
+- ✍️ Generates rewritten CV sections tailored to specific roles
+- 📥 Downloadable paraphrased CV text
 
 ---
 
-## 🛠️ Installation
+## 🖥️ How to Use
 
-1. **Clone the repo**  
-```bash
-git clone https://github.com/yourusername/cv-tailor.git
-cd cv-tailor
-```
+1. Upload a section of your CV as a PDF or type it into the input.
+2. Paste the job description in the adjacent box.
+3. Click "Paraphrase" to generate an aligned version.
+4. Review the result and download the paraphrased text.
 
-2. **Install dependencies**  
-We recommend using a virtual environment:
+---
+
+## 📦 Installation
+
 ```bash
 pip install -r requirements.txt
-```
-
-3. **Run the app**  
-```bash
 streamlit run app.py
 ```
 
 ---
 
-## 🧠 Tech Stack
+## 📚 Requirements
 
-- Python
+- Python 3.7+
 - Streamlit
-- Hugging Face Transformers (`T5`)
-- PyMuPDF (for PDF text handling)
-- Tempfile (for download feature)
+- Transformers (HuggingFace)
+- PyMuPDF
+- BeautifulSoup4
+- Requests
 
 ---
 
-## ✍️ How It Works
+## 🔗 Live App Deployment
 
-1. Paste **a section** of your CV.
-2. Paste the **full job description**.
-3. Click **Paraphrase**.
-4. Download the **tailored text** to use in your resume.
+To deploy this on [Streamlit Cloud](https://streamlit.io/cloud):
 
----
+1. Push the repo to your GitHub.
+2. Go to https://streamlit.io/cloud and log in.
+3. Click **“New App”** > select your GitHub repo.
+4. Point to `app.py`, click **Deploy**.
 
-## 📂 File Structure
+Once deployed, copy your app link and update this README:
 
-```
-cv-tailor/
-├── app.py             # Streamlit app
-├── requirements.txt   # Python dependencies
-└── README.md          # Project info
+```markdown
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://your-deployed-app-link)
 ```
 
 ---
 
-## 👨‍💻 Author
+## 🤖 Built With
 
-**Saud Albuwayshik**  
-[GitHub Profile](https://github.com/SaudAlbuwayshik)
-
----
-
-## 📜 License
-
-MIT License
+- `transformers` by Hugging Face
+- `streamlit`
+- `PyMuPDF`
+- `BeautifulSoup`
+- `requests`
