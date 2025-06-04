@@ -1,26 +1,49 @@
 import streamlit as st
+import fitz  # PyMuPDF for PDF text extraction
+import re
 from transformers import pipeline
+import tempfile
 
-st.set_page_config(page_title="CV Paraphraser (Section-Based)", layout="centered")
+# Set Streamlit page configuration
+st.set_page_config(page_title="CV Tailor", layout="centered")
 
+# Cache NER and paraphrasing pipelines to avoid reloading
 @st.cache_resource
 def get_paraphraser():
-    return pipeline("text2text-generation", model="ramsrigouthamg/t5_paraphraser")
+    # Load a text-to-text generation model for paraphrasing
+    return pipeline("text2text-generation", model="Vamsi/T5_Paraphrase_Paws")
 
-st.title("📝 CV Section Paraphraser")
+# Function to paraphrase a given CV section based on a job description
+def paraphrase_cv(cv_section, job_description):
+    paraphraser = get_paraphraser()
+    # Prompt for the paraphrasing model
+    prompt = f"Paraphrase the following CV section to better match this job description:
+Job: {job_description}
+CV: {cv_section}"
+    # Generate a paraphrased version
+    output = paraphraser(prompt, max_length=512, do_sample=True, top_k=50, top_p=0.95, num_return_sequences=1)
+    return output[0]['generated_text']
 
-cv_section = st.text_area("Paste a section from your CV (e.g., a work experience)", height=250)
-job_description = st.text_area("Paste the full Job Description", height=300)
+# Streamlit UI layout
+st.title("🎯 CV Tailor: Section-Based Paraphrasing Tool")
 
-if st.button("Paraphrase CV Section"):
-    if not cv_section.strip() or not job_description.strip():
-        st.warning("Please provide both your CV section and the job description.")
+# Input fields
+cv_input = st.text_area("✍️ Paste a section from your CV:", height=250)
+job_input = st.text_area("📄 Paste the full job description:", height=250)
+
+# When user clicks button, trigger paraphrasing
+if st.button("🔁 Paraphrase CV Section"):
+    if not cv_input.strip() or not job_input.strip():
+        st.warning("Please fill both fields before paraphrasing.")
     else:
-        with st.spinner("Paraphrasing to match job description..."):
-            prompt = f"Paraphrase this CV section to match the following job description:
-Job Description: {job_description}
-CV Section: {cv_section}"
-            model = get_paraphraser()
-            result = model(prompt, max_length=512, do_sample=True, top_k=50, top_p=0.95, num_return_sequences=1)
-            st.subheader("🎯 Paraphrased Output:")
-            st.text_area("Updated CV Section", result[0]['generated_text'], height=300)
+        with st.spinner("Paraphrasing..."):
+            result = paraphrase_cv(cv_input, job_input)
+            st.subheader("📝 Paraphrased Output")
+            st.text_area("Updated CV Text", result, height=300)
+
+            # Allow download of result
+            tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".txt", mode="w", encoding="utf-8")
+            tmp.write(result)
+            tmp.close()
+            with open(tmp.name, "rb") as f:
+                st.download_button("📥 Download as Text", f, file_name="updated_cv_section.txt")
